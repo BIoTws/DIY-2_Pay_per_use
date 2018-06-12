@@ -1,0 +1,27 @@
+{
+  "name": "diy-2_pay_per_use",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BIoTws/DIY-2_Pay_per_use.git"
+  },
+  "author": "xJeneK",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BIoTws/DIY-2_Pay_per_use/issues"
+  },
+  "homepage": "https://github.com/BIoTws/DIY-2_Pay_per_use#readme",
+  "dependencies": {
+    "biot-core": "0.0.11",
+    "chalk": "^2.4.1",
+    "figlet": "^1.2.0",
+    "ndef": "^0.2.0",
+    "pn532": "^0.1.0",
+    "i2c": "^0.2.3"
+  }
+}
