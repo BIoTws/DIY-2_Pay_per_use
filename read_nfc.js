@@ -4,14 +4,25 @@ const ndef = require('ndef');
 
 const wire = new i2c(pn532.I2C_ADDRESS, {device: '/dev/i2c-1'});
 const rfid = new pn532.PN532(wire);
+let lastUID;
+let lastScanTime = 0;
 
-rfid.on('ready', function() {
+let interval = 3000;
+
+rfid.on('ready', () => {
 	console.log('Ready...');
-	rfid.scanTag().then(function(tag) {
+	rfid.on('tag', (tag) => {
+		if (lastUID === tag.uid && lastScanTime + interval > Date.now()) return;
+		lastUID = tag.uid;
+		lastScanTime = Date.now();
 		console.log('Scanned...');
-		rfid.readNdefData().then(function(data) {
+		rfid.readNdefData().then((data) => {
 			let records = ndef.decodeMessage(data);
-			console.log(records);
+			if (records.length) {
+				console.log('Value:', records[0].value);
+			} else {
+				console.log('Value: ', null);
+			}
 		});
 	});
 });

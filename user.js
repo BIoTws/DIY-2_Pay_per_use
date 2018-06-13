@@ -36,10 +36,10 @@ async function start() {
 			channel.events.on('start', async () => {
 				console.error('channel start. t.js', channel.id);
 				interval = setInterval(async () => {
-					time += 5;
-					await channel.transfer(5, time);
+					time += 10;
+					await channel.transfer(10, time);
 					console.error('channel', channel.info());
-				}, 5000);
+				}, 10000);
 			});
 			channel.events.on('changed_step', (step) => {
 				if (step === 'mutualClose') {

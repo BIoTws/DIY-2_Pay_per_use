@@ -1,6 +1,6 @@
 {
   "name": "diy-2_pay_per_use",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -20,8 +20,9 @@
     "biot-core": "0.0.11",
     "chalk": "^2.4.1",
     "figlet": "^1.2.0",
+    "i2c": "^0.2.3",
     "ndef": "^0.2.0",
-    "pn532": "^0.1.0",
-    "i2c": "^0.2.3"
+    "pn532": "git+https://github.com/leoribg/node-pn532.git",
+    "python-shell": "^0.5.0"
   }
 }
