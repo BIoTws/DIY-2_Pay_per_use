@@ -17,7 +17,7 @@
   },
   "homepage": "https://github.com/BIoTws/DIY-2_Pay_per_use#readme",
   "dependencies": {
-    "biot-core": "0.0.11",
+    "biot-core": "^0.0.x",
     "chalk": "^2.4.1",
     "figlet": "^1.2.0",
     "i2c": "^0.2.3",
