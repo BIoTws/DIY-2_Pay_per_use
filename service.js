@@ -12,7 +12,7 @@ const rfid = new pn532.PN532(wire);
 let lastUID;
 let lastScanTime = 0;
 
-let scanInterval = 6000;
+let scanInterval = 30000;
 
 
 let minAmount = 5000;
@@ -56,12 +56,11 @@ async function start() {
 			closeBarrier();
 		});
 		channel.events.on('changed_step', (step) => {
-			console.error('changed_step: ', step);
+			// console.error('changed_step: ', step);
 		});
 		channel.events.on('new_transfer', async (amount, message) => {
 			console.error('new_transfer', amount, 'time: ', message);
 			channels[objInfo.peerDeviceAddress].balance += amount;
-			console.error('channel', channel.info());
 		});
 		await channel.init();
 		await channel.approve();
@@ -80,13 +79,13 @@ async function parseRFID(records) {
 		} else {
 			clearInterval(channels[peerDeviceAddress].interval);
 			console.error(await channels[peerDeviceAddress].channel.closeMutually());
-			openBarrier();
-			await sleep(10000);
-			closeBarrier();
 			console.error('!-----');
 			console.error(channels[peerDeviceAddress].time, channels[peerDeviceAddress].balance);
 			console.error(channels[peerDeviceAddress].channel.info());
 			delete channels[peerDeviceAddress];
+			openBarrier();
+			await sleep(10000);
+			closeBarrier();
 		}
 	}
 }
@@ -114,7 +113,7 @@ function openBarrier() {
 	let options = {
 		mode: 'text',
 		pythonOptions: ['-u'],
-		args: ['3.0']
+		args: ['11.5']
 	};
 
 	PythonShell.run('servo.py', options, function (err, results) {
@@ -127,7 +126,7 @@ function closeBarrier() {
 	let options = {
 		mode: 'text',
 		pythonOptions: ['-u'],
-		args: ['7.5']
+		args: ['7.4']
 	};
 
 	PythonShell.run('servo.py', options, function (err, results) {

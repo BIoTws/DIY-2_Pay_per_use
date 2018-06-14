@@ -34,11 +34,10 @@ async function start() {
 				console.error('channelError', channel.id, error);
 			});
 			channel.events.on('start', async () => {
-				console.error('channel start. t.js', channel.id);
+				console.error('channel start: ', channel.id);
 				interval = setInterval(async () => {
 					time += 10;
 					await channel.transfer(10, time);
-					console.error('channel', channel.info());
 				}, 10000);
 			});
 			channel.events.on('changed_step', (step) => {
@@ -47,7 +46,7 @@ async function start() {
 					console.error('close');
 					time = 0;
 				}
-				console.error('changed_step: ', step);
+				// console.error('changed_step: ', step);
 			});
 			channel.events.on('new_transfer', async (amount, message) => {
 
