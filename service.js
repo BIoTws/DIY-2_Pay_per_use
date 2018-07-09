@@ -14,21 +14,21 @@ let lastScanTime = 0;
 
 let scanInterval = 30000;
 
-
-let minAmount = 5000;
+const timeout = 20000; // 20 sec
+const minAmount = 5000;
 let channels = {};
 
 async function start() {
 	await biotCore.init('test');
 	let wallets = await biotCore.getMyDeviceWallets();
-	let arrAddresses = await biotCore.getAddressesInWallet(wallets[0]);
-	let addrBalance = await biotCore.getAddressBalance(arrAddresses[0]);
+
+	let addrBalance = await biotCore.getWalletBalance(wallets[0]);
 	console.error('balance', addrBalance);
-	if (addrBalance.base.stable < minAmount && addrBalance.base.pending < minAmount) {
+	if ((addrBalance.base.stable + addrBalance.base.pending) < minAmount) {
 		return console.error('Please use the faucet or replenish your account')
 	}
 
-	const channelsManager = new ChannelsManager(wallets[0]);
+	const channelsManager = new ChannelsManager(wallets[0], timeout);
 
 	channelsManager.events.on('newChannel', async (objInfo) => {
 		console.error('new Channel: ', objInfo);

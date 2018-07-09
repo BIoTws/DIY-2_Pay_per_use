@@ -1,8 +1,9 @@
 const biotCore = require('biot-core');
-const Channel = require('biot-core/lib/Channel');
+const ChannelsManager = require('biot-core/lib/ChannelsManager');
 const eventBus = require('byteballcore/event_bus');
 
-let minAmount = 5000;
+const timeout = 20000; // 20 sec
+const minAmount = 5000;
 
 let channel;
 let time = 0;
@@ -13,12 +14,14 @@ async function start() {
 	const device = require('byteballcore/device');
 	let myDeviceAddress = device.getMyDeviceAddress();
 	let wallets = await biotCore.getMyDeviceWallets();
-	let arrAddresses = await biotCore.getAddressesInWallet(wallets[0]);
-	let addrBalance = await biotCore.getAddressBalance(arrAddresses[0]);
+
+	let addrBalance = await biotCore.getWalletBalance(wallets[0]);
 	console.error('balance', addrBalance);
-	if (addrBalance.base.stable < minAmount && addrBalance.base.pending < minAmount) {
+	if ((addrBalance.base.stable + addrBalance.base.pending) < minAmount) {
 		return console.error('Please use the faucet or replenish your account')
 	}
+
+	const channelsManager = new ChannelsManager(wallets[0], timeout);
 
 	eventBus.on('text', async (from_address, text) => {
 		let objMessage;
@@ -29,7 +32,15 @@ async function start() {
 		}
 
 		if (objMessage && objMessage.price && objMessage.time) {
-			channel = new Channel(wallets[0], myDeviceAddress, from_address, null, 3500, 1, 10);
+			channel = channelsManager.newChannel({
+				walletId: wallets[0],
+				myDeviceAddress,
+				peerDeviceAddress: from_address,
+				peerAddress: null,
+				myAmount: 3500,
+				peerAmount: 1,
+				age: 10
+			});
 			channel.events.on('error', error => {
 				console.error('channelError', channel.id, error);
 			});
